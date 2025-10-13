@@ -1,121 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resume Matcher</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background: #f4f6f9;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .navbar {
-            border-bottom: 2px solid #0a396b6d;
-        }
-        .container {
-            margin-top: 30px;
-            max-width: 900px;
-        }
-        .card {
-            border-radius: 15px;
-            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
-            transition: transform 0.2s ease-in-out;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-        }
-        .result-card {
-            margin-top: 20px;
-            padding: 20px;
-            border-radius: 15px;
-            background: #ffffff;
-            box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
-        }
-        .badge {
-            margin: 3px;
-            font-size: 0.85rem;
-        }
-        footer {
-            background: #007bff;
-            color: white;
-            padding: 15px;
-            margin-top: 40px;
-            text-align: center;
-            border-radius: 10px 10px 0 0;
-        }
-        footer a {
-            color: #f1f1f1;
-            text-decoration: none;
-            margin: 0 10px;
-        }
-        footer a:hover {
-            text-decoration: underline;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Nexture ResumeMatcher </title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f3f4f6; scroll-behavior: smooth; }
+  a { text-decoration: none; }
+  /* Navbar */
+  .navbar { background-color: #1f2937; border-bottom: 2px solid rgba(255,255,255,0.1); }
+  .navbar-brand { font-weight: 700; font-size: 1.6rem; }
+  .nav-link { color: #e5e7eb !important; font-weight: 500; }
+  .nav-link.active { color: #4f46e5 !important; }
+  .nav-link:hover { color: #8b5cf6 !important; }
+
+  /* Section styling */
+  section { padding: 60px 0; }
+  .section-title { font-size: 2rem; font-weight: 700; margin-bottom: 20px; color: #1f2937; text-align: center; }
+
+  /* Upload Card */
+  .upload-card { border-radius: 20px; background: #fff; padding: 30px; box-shadow: 0 6px 15px rgba(0,0,0,0.08); margin-bottom: 40px; transition: transform 0.3s, box-shadow 0.3s; }
+  .upload-card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.12); }
+  textarea.form-control, input[type="file"] { border-radius: 12px; }
+  .btn-primary { border-radius: 50px; font-weight: 600; font-size: 1.1rem; background-color: #4f46e5; border: none; transition: all 0.3s; }
+  .btn-primary:hover { background-color: #6366f1; }
+
+  /* Drag & Drop */
+  .drag-drop { border: 2px dashed #4f46e5; padding: 30px; border-radius: 15px; text-align: center; color: #4f46e5; cursor: pointer; margin-bottom: 20px; transition: background 0.3s, color 0.3s; }
+  .drag-drop.dragover { background: #4f46e5; color: #fff; }
+
+  /* Results Grid */
+  .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+  .result-card { background: #fff; border-radius: 20px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s; }
+  .result-card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.12); }
+  .badge { margin: 3px; font-size: 0.85rem; cursor: pointer; }
+  .badge:hover { background-color: #4f46e5; color: #fff; }
+
+  /* Progress Bar */
+  .progress { height: 20px; border-radius: 10px; margin-bottom: 10px; }
+  .progress-bar { border-radius: 10px; font-weight: 600; }
+
+  /* Sort Options */
+  .sort-select { max-width: 220px; margin-bottom: 20px; }
+
+  /* Footer */
+  footer { background: #1f2937; color: #fff; padding: 25px; margin-top: 50px; text-align: center; border-radius: 15px 15px 0 0; }
+  footer a { color: #e5e7eb; margin: 0 10px; }
+  footer a:hover { text-decoration: underline; }
+</style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="#">ResumeMatcher</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Upload Resumes</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
 
-    <!-- Upload Form -->
-    <div class="container">
-        <div class="card p-4">
-            <h2 class="text-center text-primary">🚀 Resume Matcher</h2>
-            <p class="text-center text-muted">Upload resumes and match them against a job description</p>
-            <form method="POST" enctype="multipart/form-data">
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Job Description</label>
-                    <textarea name="job_desc" class="form-control" rows="4" placeholder="Enter job description..." required></textarea>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Upload Resumes</label>
-                    <input type="file" name="resumes" class="form-control" multiple required>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Find Best Resume</button>
-            </form>
-        </div>
-
-        <!-- Results -->
-        {% if ranked_resumes %}
-        <h3 class="mt-4">📊 Resume Ranking Results</h3>
-        {% for resume in ranked_resumes %}
-        <div class="result-card">
-            <h5>{{ loop.index }}. <span class="text-primary">{{ resume.name }}</span></h5>
-            <p>✅ <strong>Score:</strong> {{ resume.score }} | 📈 <strong>Match:</strong> {{ resume.percentage }}%</p>
-            <p>🔑 <strong>Top Keywords:</strong></p>
-            {% for kw in resume.keywords %}
-                <span class="badge bg-success">{{ kw }}</span>
-            {% endfor %}
-        </div>
-        {% endfor %}
-        {% endif %}
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#home"> Nexture ResumeMatcher </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#upload">Upload</a></li>
+        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+      </ul>
     </div>
+  </div>
+</nav>
 
-    <!-- Footer -->
-    <footer>
-        <p>© 2025 ResumeMatcher | Built with ❤ using Flask</p>
-        <p>
-            <a href="#">Privacy Policy</a> | 
-            <a href="#">Terms of Service</a>
-        </p>
-    </footer>
+<!-- Home Section -->
+<section id="home">
+  <div class="container">
+    <h1 class="section-title">🚀 Welcome to Nexture ResumeMatcher </h1>
+    <p class="text-center text-muted">Upload resumes, compare with job descriptions, and get ranked results instantly!</p>
+  </div>
+</section>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Upload Section -->
+<section id="upload">
+  <div class="container">
+    <div class="upload-card">
+      <h2 class="text-center text-primary"><i class="fas fa-file-upload"></i> Upload Resumes</h2>
+      <p class="text-center text-muted">Drag & drop resumes or select files manually</p>
+      <form method="POST" enctype="multipart/form-data" id="resumeForm">
+        <div class="mb-3">
+          <label class="form-label fw-bold">Job Description</label>
+          <textarea name="job_desc" class="form-control" rows="5" placeholder="Paste job description here..." required></textarea>
+        </div>
+        <div class="drag-drop" id="dragDropArea">Drag & Drop Resumes Here or Click to Upload</div>
+        <input type="file" name="resumes" class="form-control d-none" id="resumeInput" multiple required>
+        <button type="submit" class="btn btn-primary w-100 mt-3"><i class="fas fa-magnifying-glass"></i> Match Resumes</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- About Section -->
+<section id="about">
+  <div class="container">
+    <h2 class="section-title">About ResumeMatcher</h2>
+    <p class="text-center text-muted">ResumeMatcher is an advanced SaaS tool that ranks resumes based on job description matching, top keywords, and scoring percentage. Built for recruiters to save time and find the best candidates instantly.</p>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact">
+  <div class="container">
+    <h2 class="section-title">Contact Us</h2>
+    <p class="text-center text-muted">For support or inquiries, email us at <a href="mailto:support@resumematcher.com">support@resumematcher.com</a></p>
+  </div>
+</section>
+
+<!-- Results Section -->
+{% if ranked_resumes %}
+<section id="results">
+  <div class="container">
+    <div class="d-flex justify-content-end">
+      <select class="form-select sort-select" id="sortSelect">
+        <option value="score" selected>Sort by Score</option>
+        <option value="percentage">Sort by Match %</option>
+        <option value="name">Sort by Name</option>
+      </select>
+    </div>
+    <div class="results-grid" id="resultsGrid">
+      {% for resume in ranked_resumes %}
+      <div class="result-card" data-score="{{ resume.score }}" data-percentage="{{ resume.percentage }}" data-name="{{ resume.name }}">
+        <h5>{{ loop.index }}. <span class="text-primary">{{ resume.name }}</span></h5>
+        <div class="progress">
+          <div class="progress-bar bg-success" role="progressbar" style="width: {{ resume.percentage }}%">{{ resume.percentage }}%</div>
+        </div>
+        <p>✅ <strong>Score:</strong> {{ resume.score }}</p>
+        <p>🔑 <strong>Top Keywords:</strong></p>
+        {% for kw in resume.keywords %}
+          <span class="badge bg-info text-dark" data-bs-toggle="tooltip" title="Matched Skill">{{ kw }}</span>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Footer -->
+<footer>
+  <p>© 2025 ResumeMatcher SaaS | Built with <i class="fas fa-heart"></i> & Flask</p>
+  <p><a href="#">Privacy Policy</a> | <a href="#">Terms</a> | <a href="#">Contact</a></p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Tooltips
+  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+  tooltipTriggerList.forEach(t => new bootstrap.Tooltip(t));
+
+  // Drag & Drop
+  const dragDropArea = document.getElementById('dragDropArea');
+  const resumeInput = document.getElementById('resumeInput');
+  dragDropArea.addEventListener('click', () => resumeInput.click());
+  dragDropArea.addEventListener('dragover', e => { e.preventDefault(); dragDropArea.classList.add('dragover'); });
+  dragDropArea.addEventListener('dragleave', e => { e.preventDefault(); dragDropArea.classList.remove('dragover'); });
+  dragDropArea.addEventListener('drop', e => {
+      e.preventDefault();
+      dragDropArea.classList.remove('dragover');
+      resumeInput.files = e.dataTransfer.files;
+  });
+
+  // Sort functionality
+  const sortSelect = document.getElementById('sortSelect');
+  const resultsGrid = document.getElementById('resultsGrid');
+  if(sortSelect){
+      sortSelect.addEventListener('change', () => {
+          let cards = Array.from(resultsGrid.children);
+          let criteria = sortSelect.value;
+          cards.sort((a,b) => {
+              if(criteria === 'name') return a.dataset.name.localeCompare(b.dataset.name);
+              return parseFloat(b.dataset[criteria]) - parseFloat(a.dataset[criteria]);
+          });
+          cards.forEach(c => resultsGrid.appendChild(c));
+      });
+  }
+</script>
 </body>
-</html>>
+</html>
