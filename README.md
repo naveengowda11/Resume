@@ -91,5 +91,6 @@ Add user authentication for recruiters
 🧑‍💻 Author
 
 Naveen Kumar B
+
 B.E. Computer Science (Data Science Specialization)
 A passionate developer building practical, data-driven web applications.
